@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns="http://www.knime.org/2008/09/XMLConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.knime.org/2008/09/XMLConfig http://www.knime.org/XMLConfig_2008_09.xsd" key="settings.xml">
+<entry key="node_file" type="xstring" value="settings.xml"/>
+<config key="flow_stack"/>
+<config key="internal_node_subsettings">
+<entry key="memory_policy" type="xstring" value="CacheSmallInMemory"/>
+</config>
+<config key="model">
+<entry key="sourceCode" type="xstring" value="import tensorflow as tf%%00010from TFModel import TFModel%%00010import numpy as np%%00010%%00010# Get the training data from the table%%00010x_train = np.array([x.array for x in input_table['Image'].values])[...,None]%%00010y_train = input_table.iloc[:,2:].values%%00010%%00010# Set some training varibales%%00010batch_size = 32%%00010epochs = 5%%00010learning_rate = 0.001%%00010%%00010# Get some handy variables%%00010num_classes = y_train.shape[1]%%00010num_samples = x_train.shape[0]%%00010num_batches = int(np.ceil(num_samples/batch_size))%%00010%%00010print('Training for {} epochs on {} batches of size {}.'.format(epochs, num_batches, batch_size))%%00010%%00010# Use the session from the TFModel%%00010with input_network.session as sess:%%00010%%00009%%00010%%00009# Get the input tensor%%00010%%00009x = input_network.inputs['input']%%00010%%00009%%00010%%00009# Get the output tensor%%00010%%00009y_hat = input_network.outputs['output']%%00010%%00009%%00010%%00009# Define the ground truth tensor%%00010%%00009y = tf.placeholder(dtype=tf.float32, shape=(None,num_classes))%%00010%%00009%%00010%%00009# Define the loss%%00010%%00009loss = tf.losses.mean_squared_error(y, y_hat)%%00010%%00009%%00010%%00009# Define optimizer and training op%%00010%%00009optimizer = tf.train.RMSPropOptimizer(learning_rate=learning_rate)%%00010%%00009train = optimizer.minimize(loss)%%00010%%00010%%00009# Initialize all variables%%00010%%00009sess.run(tf.global_variables_initializer())%%00010%%00010%%00009for epoch in range(epochs):%%00010%%00009%%00009# The average loss for this epoch%%00010%%00009%%00009avg_loss = 0%%00010%%00010%%00009%%00009# Loop over all batches%%00010%%00009%%00009for i in range(num_batches):%%00010%%00009%%00009%%00009# Extract batch%%00010%%00009%%00009%%00009fr = int(i*batch_size)%%00010%%00009%%00009%%00009to = int(np.minimum((i + 1)*batch_size, num_samples))%%00010%%00009%%00009%%00009x_batch = x_train[fr:to,...]%%00010%%00009%%00009%%00009y_batch = y_train[fr:to,...]%%00010%%00010%%00009%%00009%%00009# Run training op%%00010%%00009%%00009%%00009_, l = sess.run([train, loss], feed_dict={x: x_batch,%%00010%%00009%%00009%%00009%%00009%%00009%%00009%%00009%%00009%%00009%%00009%%00009%%00009%%00009  y: y_batch})%%00010%%00009%%00009%%00009# Compute average loss%%00010%%00009%%00009%%00009avg_loss += l / num_batches%%00010%%00010%%00009%%00009# Display logs per epoch step%%00010%%00009%%00009print(&quot;Epoch: {}, loss={:.9f}&quot;.format(epoch, avg_loss))%%00010%%00009print(&quot;First Optimization Finished!.&quot;)%%00010%%00009%%00010%%00009# Create the output network%%00010%%00009# NOTE: The whole session is passed to the model (to save the variables)%%00010%%00009#       This needs to be called before the session is closed%%00010%%00009output_network = TFModel(inputs=x, outputs=y_hat, session=sess)"/>
+<entry key="rowLimit" type="xint" value="1000"/>
+<entry key="pythonVersionOption" type="xstring" value="PYTHON3"/>
+<entry key="convertMissingToPython" type="xboolean" value="false"/>
+<entry key="convertMissingFromPython" type="xboolean" value="false"/>
+<entry key="sentinelOption" type="xstring" value="MIN_VAL"/>
+<entry key="sentinelValue" type="xint" value="0"/>
+<entry key="chunkSize" type="xint" value="500000"/>
+<entry key="python2Command" type="xstring" value=""/>
+<entry key="python3Command" type="xstring" value=""/>
+</config>
+<config key="nodeAnnotation">
+<entry key="text" type="xstring" value="Train CNN"/>
+<entry key="bgcolor" type="xint" value="16777215"/>
+<entry key="x-coordinate" type="xint" value="248"/>
+<entry key="y-coordinate" type="xint" value="579"/>
+<entry key="width" type="xint" value="104"/>
+<entry key="height" type="xint" value="13"/>
+<entry key="alignment" type="xstring" value="CENTER"/>
+<entry key="borderSize" type="xint" value="0"/>
+<entry key="borderColor" type="xint" value="16777215"/>
+<entry key="defFontSize" type="xint" value="11"/>
+<entry key="annotation-version" type="xint" value="20151123"/>
+<config key="styles"/>
+</config>
+<entry key="customDescription" type="xstring" isnull="true" value=""/>
+<entry key="state" type="xstring" value="IDLE"/>
+<entry key="factory" type="xstring" value="org.knime.dl.python.base.node.learner.DLPythonLearnerNodeFactory"/>
+<entry key="node-name" type="xstring" value="DL Python Network Learner"/>
+<entry key="node-bundle-name" type="xstring" value="KNIME Deep Learning - Python Backend"/>
+<entry key="node-bundle-symbolic-name" type="xstring" value="org.knime.dl.python"/>
+<entry key="node-bundle-vendor" type="xstring" value="KNIME AG, Zurich, Switzerland"/>
+<entry key="node-bundle-version" type="xstring" value="3.7.0.v201811291931"/>
+<entry key="node-feature-name" type="xstring" value="KNIME Deep Learning - Keras Integration"/>
+<entry key="node-feature-symbolic-name" type="xstring" value="org.knime.features.dl.keras.feature.group"/>
+<entry key="node-feature-vendor" type="xstring" value="KNIME AG, Zurich, Switzerland"/>
+<entry key="node-feature-version" type="xstring" value="3.7.0.v201811291931"/>
+<config key="factory_settings"/>
+<entry key="name" type="xstring" value="DL Python Network Learner"/>
+<entry key="hasContent" type="xboolean" value="false"/>
+<entry key="isInactive" type="xboolean" value="false"/>
+<config key="ports">
+<config key="port_1">
+<entry key="index" type="xint" value="1"/>
+<entry key="port_dir_location" type="xstring" isnull="true" value=""/>
+</config>
+</config>
+<config key="filestores">
+<entry key="file_store_location" type="xstring" isnull="true" value=""/>
+<entry key="file_store_id" type="xstring" isnull="true" value=""/>
+</config>
+</config>
